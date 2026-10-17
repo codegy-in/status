@@ -1,31 +1,33 @@
-# Change these first
-owner: upptime # Your GitHub organization or username, where this repository lives
-repo: upptime # The name of this repository
+# Codegy uptime monitor. Every 5 min GitHub Actions checks each site, opens an
+# issue on an outage and closes it on recovery. HQ reads those issues.
+#
+# PUBLIC REPO: everything here is world-readable. Name client monitors by an
+# opaque id (e.g. "c-017 site"), never the institute's name, and keep client
+# URLs in repository secrets ($C017_SITE) so the client list stays private.
+# HQ appends entries here when it onboards a client (README §9 step 7).
+#
+# Actions are disabled on this repo until the GH_PAT secret is set and
+# hq/app are live; see README.md "Turning it on".
+owner: codegy-in
+repo: status
 
 sites:
-  - name: Google
-    url: https://www.google.com
-  - name: Wikipedia
-    url: https://en.wikipedia.org
-  - name: Hacker News
-    url: https://news.ycombinator.com
-  - name: Secret Site
-    url: $SECRET_SITE
+  - name: HQ
+    url: https://hq.codegy.in/auth/login
+  - name: Platform
+    url: https://app.codegy.in
+  - name: Codegy website
+    url: https://codegy.in
 
 status-website:
-  # Add your custom domain name, or remove the `cname` line if you don't have a domain
-  # Uncomment the `baseUrl` line if you don't have a custom domain and add your repo name there
-  cname: demo.upptime.js.org
-  # baseUrl: /your-repo-name
-  logoUrl: https://raw.githubusercontent.com/upptime/upptime.js.org/master/static/img/icon.svg
-  name: Upptime
-  introTitle: "**Upptime** is the open-source uptime monitor and status page, powered entirely by GitHub."
-  introMessage: This is a sample status page which uses **real-time** data from our [GitHub repository](https://github.com/upptime/upptime). No server required — just GitHub Actions, Issues, and Pages. [**Get your own for free**](https://github.com/upptime/upptime)
+  cname: status.codegy.in
+  name: Codegy Status
+  introTitle: "**Codegy** service status"
+  introMessage: Live status of Codegy platforms and the institute sites we run.
   navbar:
     - title: Status
       href: /
-    - title: GitHub
-      href: https://github.com/$OWNER/$REPO
 
-# Upptime also supports notifications, assigning issues, and more
-# See https://upptime.js.org/docs/configuration
+# Outage issues are assigned so they show up in GitHub notifications.
+assignees:
+  - diwakargbof
