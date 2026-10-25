@@ -5,20 +5,41 @@ Upptime (https://upptime.js.org) on GitHub Actions + Pages. Config lives in
 Upptime, so don't edit them by hand. `README.md`, `history/`, `api/` and
 `graphs/` are rewritten by the workflows.
 
-## Turning it on (once hq/app are live)
+## Turning it on
 
-Actions are **disabled** on this repo so it doesn't open outage issues for
-sites that don't exist yet.
+Actions are **disabled** on this repo so it doesn't open outage issues
+before every monitored address is set.
 
 1. Create a fine-grained token owned by `ops@codegy.in` (or a GitHub App, see
    the Upptime docs) with access to **only** `codegy-in/status`: Contents,
    Issues, Workflows, Actions = read/write. Save it in Bitwarden.
 2. Repo → Settings → Secrets → Actions → `GH_PAT` = that token.
+   Also `PLATFORM_HEALTH_URL` = the generic portal's login page (the
+   portal's Vercel address followed by `/sd/login`; HQ's private docs name
+   it). Use the generic address, never a client's portal domain: the
+   status page and the Actions logs (a failed check can print the host)
+   are public. It is a secret so this file names no portal host.
 3. Repo → Settings → Actions → General → allow actions.
 4. Actions → "Setup CI" → Run workflow. It builds the status site on the
    `gh-pages` branch.
 5. Repo → Settings → Pages → source `gh-pages`, custom domain `status.codegy.in`.
-   In DNS (Vercel DNS for `codegy.in`): `CNAME status → codegy-in.github.io`.
+   In DNS for `codegy.in` (at GoDaddy today): `CNAME status → codegy-in.github.io`.
+
+## Action versions
+
+The Upptime actions are pinned to release tags (`upptime/uptime-monitor@v1.46.0`,
+`upptime/updates@v1.0.1`), not `@master`. A secret named in `.upptimerc.yml`
+(`$NAME`) only reaches the checks if it is listed in the workflows'
+`SECRETS_CONTEXT`; Upptime adds it when it regenerates them, and
+`PLATFORM_HEALTH_URL` is already listed by hand.
+
+"Setup CI" (first step) and the daily "Update Template CI" regenerate
+every workflow: every `uptime-monitor@` line moves to the newest Upptime
+release, and `update-template.yml` and `updates.yml` go back to
+`@master`. So after "Setup CI" has run once: disable "Update Template
+CI" and "Updates CI" (Actions → the workflow → ⋯ → Disable workflow),
+then in a PR set every `upptime/` line back to a release tag at least
+two weeks old. Bump tags by hand after reading the release notes.
 
 ## Adding a client
 
