@@ -1,23 +1,26 @@
 # Codegy uptime monitor. Every 5 min GitHub Actions checks each site, opens an
-# issue on an outage and closes it on recovery. HQ reads those issues.
+# issue on an outage and closes it on recovery (HQ is to read those issues).
 #
 # PUBLIC REPO: everything here is world-readable. Name client monitors by an
 # opaque id (e.g. "c-017 site"), never the institute's name, and keep client
 # URLs in repository secrets ($C017_SITE) so the client list stays private.
-# HQ appends entries here when it onboards a client (README §9 step 7).
+# HQ appends entries here when it onboards a client (hq README §9 step 7).
 #
-# Actions are disabled on this repo until the GH_PAT secret is set and
-# hq/app are live; see README.md "Turning it on".
+# Actions are disabled on this repo until GH_PAT and PLATFORM_HEALTH_URL
+# are set; see OPERATIONS.md "Turning it on".
 owner: codegy-in
 repo: status
 
 sites:
   - name: HQ
     url: https://hq.codegy.in/auth/login
+  # The institute portal's login page, from the PLATFORM_HEALTH_URL secret:
+  # the portal is served on clients' domains, so per the rule above its
+  # address stays out of this file (see OPERATIONS.md).
   - name: Platform
-    url: https://app.codegy.in
+    url: $PLATFORM_HEALTH_URL
   - name: Codegy website
-    url: https://codegy.in
+    url: https://www.codegy.in
 
 status-website:
   cname: status.codegy.in
